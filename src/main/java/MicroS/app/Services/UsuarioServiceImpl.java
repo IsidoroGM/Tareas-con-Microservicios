@@ -34,7 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         //comprobamos si el usuario existe
         if(usu != null){
             usu.setNombre(usuario.getNombre());
-            usu.setPassword(usuario.getPassword());
+            usu.setPassword(usuario.getPassword()); 
             return usuarioRepository.save(usu);
         }else{
             return null;
