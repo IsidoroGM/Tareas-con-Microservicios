@@ -9,31 +9,34 @@ import jakarta.persistence.Id;
 public class Usuario {
 
     @Id
-    //Se va a generar automaticamente, tomando como valor el siguiente al ya existente. 
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     private String username;
     private String password;
     private String nombre;
 
-    //Constructor sin parámetros
-    public Usuario(){
-        super();
+    public Usuario() {
     }
 
-    public Usuario(int id, String username, String password, String nombre) {
-        Id = id;
+    public Usuario(
+            Integer id,
+            String username,
+            String password,
+            String nombre
+    ) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.nombre = nombre;
     }
 
-    public int getId() {
-        return Id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setId(int id) {
-        Id = id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUsername() {
