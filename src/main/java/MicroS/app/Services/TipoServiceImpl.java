@@ -10,10 +10,12 @@ import MicroS.app.Persistence.Repositories.TipoRepository;
 @Service
 public class TipoServiceImpl implements TipoService {
 
-    private final TipoRepository tipoRepository;
+    private TipoRepository tipoRepository;
+    private TareaService tareaService;
 
-    public TipoServiceImpl(TipoRepository tipoRepository) {
+    public TipoServiceImpl(TipoRepository tipoRepository, TareaService tareaService) {
         this.tipoRepository = tipoRepository;
+        this.tareaService = tareaService;
     }
 
     @Override
@@ -24,6 +26,19 @@ public class TipoServiceImpl implements TipoService {
     @Override
     public Tipo addTipo(Tipo tipo){
         return tipoRepository.save(tipo);
+    }
+
+    @Override
+    public Tipo deleteTipo(Integer id) {
+        tareaService.deleteTareabyTipoid(id);
+
+        Tipo t = tipoRepository.findById(id).orElse(null);
+
+        if (t != null) {
+            tipoRepository.delete(t);
+        }
+
+        return t;
     }
 
 }

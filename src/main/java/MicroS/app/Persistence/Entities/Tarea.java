@@ -14,7 +14,7 @@ public class Tarea {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int Id;
+    private Integer id;
     private String titulo;
     private String resumen;
     private LocalDate fecha;
@@ -35,20 +35,20 @@ public class Tarea {
     }
 
     //Constructor con parámetros, sin Tipo y sin Usuario
-    public Tarea(int id, String titulo, String resumen, LocalDate fecha, boolean realizada) {
-        Id = id;
+    public Tarea(Integer id, String titulo, String resumen, LocalDate fecha, boolean realizada) {
+        this.id = id;
         this.titulo = titulo;
         this.resumen = resumen;
         this.fecha = fecha;
         this.realizada = realizada;
     }
 
-    public int getId() {
-        return Id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setId(int id) {
-        Id = id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitulo() {

@@ -9,5 +9,6 @@ public interface TipoService {
 
     public List<Tipo> getTipos();
     public Tipo addTipo(Tipo tipo);
+    Tipo deleteTipo(Integer id);
 
 }

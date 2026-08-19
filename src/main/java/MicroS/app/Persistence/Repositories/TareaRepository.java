@@ -11,4 +11,5 @@ public interface TareaRepository extends JpaRepository<Tarea, Integer>{
 
     public List<Tarea> findAllByUsuario_id(Integer id);
 
+    public List<Tarea> findAllByTipo_id(Integer id);
 }
