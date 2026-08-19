@@ -11,7 +11,7 @@ public class Tipo {
     @Id
     //Se va a generar automaticamente, tomando como valor el siguiente al ya existente. 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int Id;
+    private Integer id;
     private String nombre;
 
     //Constructor sin parámetros
@@ -19,17 +19,17 @@ public class Tipo {
     }
 
     //Constructor con parámetros
-    public Tipo(int id, String nombre) {
-        Id = id;
+    public Tipo(Integer id, String nombre) {
+        this.id = id;
         this.nombre = nombre;
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getNombre() {
@@ -40,11 +40,5 @@ public class Tipo {
         this.nombre = nombre;
     }
 
-    
-
-    
-    
-
-    
 
 }
