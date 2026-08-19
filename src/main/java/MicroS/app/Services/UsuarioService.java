@@ -12,4 +12,6 @@ public interface UsuarioService {
 
     public Usuario updateUsuario(Usuario usuario);
 
+    public Usuario deleteUsuario(String username);
+
 }
