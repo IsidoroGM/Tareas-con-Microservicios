@@ -13,6 +13,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -28,10 +31,13 @@ public class TareasRestController {
         return ResponseEntity.ok(tareas);
     }
 
-    /*@GetMapping
-    public ResponseEntity<List<Usuario>> getUsuario(){
-        List<Usuario> usuarios = usuarioService.getUsuario();
-        return ResponseEntity.ok(usuarios);*/
+    @PostMapping("/{username}/{tipo}")
+    //Declaramos en PathVariable a que parámetro corresponde cada valor
+    private ResponseEntity<?> addTarea (@PathVariable("username")String username, @PathVariable("tipo") String tipo, @RequestBody Tarea tarea ){
+        Tarea t=tareaService.addTarea(username, tipo, tarea);
+    
+        return ResponseEntity.ok(t);
+    }
     
 
 }
