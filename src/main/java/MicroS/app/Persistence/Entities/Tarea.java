@@ -35,12 +35,12 @@ public class Tarea {
     }
 
     //Constructor con parámetros, sin Tipo y sin Usuario
-    public Tarea(Integer id, String titulo, String resumen, LocalDate fecha, boolean realizada) {
+    public Tarea(Integer id, String titulo, String resumen, LocalDate fecha) {
         this.id = id;
         this.titulo = titulo;
         this.resumen = resumen;
         this.fecha = fecha;
-        this.realizada = realizada;
+        this.realizada = false;
     }
 
     public Integer getId() {
