@@ -1,6 +1,5 @@
 package MicroS.app.Persistence.Entities;
 
-import java.time.LocalDate;
 import java.sql.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

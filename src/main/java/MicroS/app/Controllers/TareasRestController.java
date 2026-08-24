@@ -1,13 +1,9 @@
 package MicroS.app.Controllers;
 
-import MicroS.app.Controllers.UsuarioRestcontroller;
 import org.springframework.web.bind.annotation.RestController;
 
 import MicroS.app.DTO.InfoTareaResponse;
 import MicroS.app.Persistence.Entities.Tarea;
-import MicroS.app.Persistence.Repositories.TareaRepository;
-import MicroS.app.Persistence.Repositories.TipoRepository;
-import MicroS.app.Persistence.Repositories.UsuarioRepository;
 import MicroS.app.Services.TareaService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
