@@ -1,10 +1,12 @@
 package MicroS.app.Services;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import MicroS.app.DTO.InfoTareaResponse;
 import MicroS.app.Persistence.Entities.Tarea;
 import MicroS.app.Persistence.Entities.Tipo;
 import MicroS.app.Persistence.Entities.Usuario;
@@ -92,7 +94,7 @@ public class TareaServiceImpl implements TareaService {
 
         tarea.setRealizada(false);
         tarea.setUsuario(usuario);
-        tarea.setFecha(LocalDate.now());
+        //tarea.setFecha();
         tarea.setTipo(tipoEncontrado);
 
         return tareaRepository.save(tarea);
@@ -127,5 +129,24 @@ public class TareaServiceImpl implements TareaService {
                 fecha,
                 usuario.getId()
         );
+    }
+
+    @Override
+    public List<Tarea> getTareas(String username, boolean finalizada) {
+        
+        Usuario usuario = usuarioRepository.findByUsername(username);
+
+        if (usuario != null) {
+            return tareaRepository.findByRealizadaAndUsuario_Id(finalizada, usuario.getId());
+            
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<InfoTareaResponse> getInfoTareas() {
+        return tareaRepository.getInfoTarea();
+         
     }
 }

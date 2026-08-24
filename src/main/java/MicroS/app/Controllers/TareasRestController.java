@@ -1,7 +1,9 @@
 package MicroS.app.Controllers;
 
+import MicroS.app.Controllers.UsuarioRestcontroller;
 import org.springframework.web.bind.annotation.RestController;
 
+import MicroS.app.DTO.InfoTareaResponse;
 import MicroS.app.Persistence.Entities.Tarea;
 import MicroS.app.Persistence.Repositories.TareaRepository;
 import MicroS.app.Persistence.Repositories.TipoRepository;
@@ -33,7 +35,7 @@ public class TareasRestController {
 
     private final TareaService tareaService;
 
-    public TareasRestController(TareaService tareaService) {
+    public TareasRestController(TareaService tareaService, UsuarioRestcontroller usuarioRestcontroller) {
         this.tareaService = tareaService;
     }
 
@@ -68,10 +70,23 @@ public class TareasRestController {
         return ResponseEntity.ok(tareas);
         }
 
-        @GetMapping("/{username}/por-realilzadas")
-        public String getMethodName(@RequestParam String param) {
-            return new String();
+        @GetMapping("/{username}/por-realizadas")
+        public ResponseEntity<?> getTareasPorRealizadas(
+            @PathVariable ("username")String username,
+            @RequestParam("realizada")boolean realizada){
+
+                List<Tarea> tareas=tareaService.getTareas(username, realizada);
+                return ResponseEntity.ok(tareas);
+            
         }
+
+        @GetMapping("/info")
+        public ResponseEntity<?> getInfoTareas(){
+            List<InfoTareaResponse> infoTareas = tareaService.getInfoTareas();
+            return ResponseEntity.ok(infoTareas);
+        }
+        
+        
         
     
     

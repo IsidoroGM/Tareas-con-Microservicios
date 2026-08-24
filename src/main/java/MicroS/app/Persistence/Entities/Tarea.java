@@ -1,7 +1,7 @@
 package MicroS.app.Persistence.Entities;
 
 import java.time.LocalDate;
-
+import java.sql.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +17,7 @@ public class Tarea {
     private Integer id;
     private String titulo;
     private String resumen;
-    private LocalDate fecha;
+    private Date fecha;
     private boolean realizada;
 
     @ManyToOne
@@ -35,7 +35,7 @@ public class Tarea {
     }
 
     //Constructor con parámetros, sin Tipo y sin Usuario
-    public Tarea(Integer id, String titulo, String resumen, LocalDate fecha) {
+    public Tarea(Integer id, String titulo, String resumen, Date fecha) {
         this.id = id;
         this.titulo = titulo;
         this.resumen = resumen;
@@ -67,11 +67,11 @@ public class Tarea {
         this.resumen = resumen;
     }
 
-    public LocalDate getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
