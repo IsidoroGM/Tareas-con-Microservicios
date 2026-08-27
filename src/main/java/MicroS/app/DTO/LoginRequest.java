@@ -4,16 +4,16 @@ package MicroS.app.DTO;
 public class LoginRequest {
 
     private String username;
-    private String pasword;
+    private String password;
 
     
     public LoginRequest() {
     }
 
 
-    public LoginRequest(String username, String pasword) {
+    public LoginRequest(String username, String password) {
         this.username = username;
-        this.pasword = pasword;
+        this.password = password;
     }
 
 
@@ -27,13 +27,13 @@ public class LoginRequest {
     }
 
 
-    public String getPasword() {
-        return pasword;
+    public String getPassword() {
+        return password;
     }
 
 
-    public void setPasword(String pasword) {
-        this.pasword = pasword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     
