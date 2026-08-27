@@ -11,5 +11,6 @@ public interface AuthService {
 
     public TokenResponse register(Usuario usuario);
     public TokenResponse login(LoginRequest request);
+    public TokenResponse refresh(String authHeader);
 
 }

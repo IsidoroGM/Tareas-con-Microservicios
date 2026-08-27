@@ -8,9 +8,11 @@ import MicroS.app.Persistence.Entities.Usuario;
 import MicroS.app.Services.AuthService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 
@@ -34,6 +36,16 @@ public class AuthRestController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
         TokenResponse token = authService.login(request);
+        return ResponseEntity.ok(token);
+    }
+    
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refhres(@RequestHeader(HttpHeaders.AUTHORIZATION)String authHeader){
+        //RequestHeader lee el Header de la consulta (postman)
+        //HttpHeaders lee la consulta con key "AUTHORIZATION"
+        //A dicha consulta le damos el nombre String authHeader
+
+        TokenResponse token = authService.refresh(authHeader);
         return ResponseEntity.ok(token);
     }
     

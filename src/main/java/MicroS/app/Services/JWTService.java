@@ -7,5 +7,7 @@ public interface JWTService {
     //Méotodo que genere un token para un usuario
     public String generateToken(Usuario usuario);
     public String generateRefreshToken(Usuario usuario);
+    public String extractUsername(String token);
+    public boolean isTokenVaild(String token, Usuario usuario);
 
 }

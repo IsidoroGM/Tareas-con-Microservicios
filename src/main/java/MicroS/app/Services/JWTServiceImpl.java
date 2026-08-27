@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import MicroS.app.Persistence.Entities.Usuario;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -21,8 +22,6 @@ public class JWTServiceImpl implements JWTService {
     private Long jwtExpiration;
     @Value("${application.security.jwt.refresh-expiration}")
     private Long refreshExpiration;
-
-    
 
     @Override
     public String generateToken(Usuario usuario) {
@@ -50,6 +49,36 @@ public class JWTServiceImpl implements JWTService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-   
+    @Override
+    public String extractUsername(String token) {
+        Claims jwtToken = Jwts.parser()
+            .verifyWith(getSignInKey())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
 
+        return jwtToken.getSubject();
+    }
+
+    @Override
+    public boolean isTokenVaild(String token, Usuario usuario) {
+        String username = extractUsername(token);
+
+        return username.equals(usuario.getUsername()) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+
+    }
+
+    public Date extractExpiration(String token) {
+        Claims jwtToken = Jwts.parser()
+            .verifyWith(getSignInKey())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+
+        return jwtToken.getExpiration();
+    }
 }

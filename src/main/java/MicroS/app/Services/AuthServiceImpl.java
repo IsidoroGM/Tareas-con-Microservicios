@@ -2,6 +2,7 @@ package MicroS.app.Services;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -82,4 +83,36 @@ public class AuthServiceImpl implements AuthService {
         }
         tokenRepository.saveAll(validUserTokens);
     }
+
+    @Override
+    public TokenResponse refresh(String authHeader) {
+        // Si auth header no es null, o no empieza con "Bearer"
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Bearer Token");
+        }
+
+        String refreshToken = authHeader.substring(7);
+        String username = jwtService.extractUsername(refreshToken);
+
+        if (username == null) {
+            throw new IllegalArgumentException("Invalid Refresh Token");
+        }
+
+        Usuario usuario = usuarioRepository.findByUsername(username);
+
+        if (usuario == null) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        if (!jwtService.isTokenVaild(refreshToken, usuario)) {
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+
+        String accessToken = jwtService.generateToken(usuario);
+        revokeAllUserToken(usuario);
+        saveUserToken(usuario, accessToken);
+
+        return new TokenResponse(accessToken, refreshToken);
+    }
+
 }
