@@ -1,41 +1,85 @@
 package MicroS.app.Services;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import MicroS.app.DTO.LoginRequest;
 import MicroS.app.DTO.TokenResponse;
-import MicroS.app.Persistence.Entities.Usuario;
 import MicroS.app.Persistence.Entities.Token;
+import MicroS.app.Persistence.Entities.Usuario;
 import MicroS.app.Persistence.Repositories.TokenRepository;
 import MicroS.app.Persistence.Repositories.UsuarioRepository;
 
 @Service
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 
+    private final PasswordEncoder passwordEncoder;
+    private final UsuarioRepository usuarioRepository;
+    private final JWTService jwtService;
+    private final TokenRepository tokenRepository;
+    private final AuthenticationManager authenticationManager;
 
-    private PasswordEncoder passwordEncoder;
-    private UsuarioRepository usuarioRepository;
-    private JWTService jwtService;
-    private TokenRepository tokenRepository;
+    public AuthServiceImpl(
+            PasswordEncoder passwordEncoder,
+            UsuarioRepository usuarioRepository,
+            JWTService jwtService,
+            TokenRepository tokenRepository,
+            AuthenticationManager authenticationManager) {
+
+        this.passwordEncoder = passwordEncoder;
+        this.usuarioRepository = usuarioRepository;
+        this.jwtService = jwtService;
+        this.tokenRepository = tokenRepository;
+        this.authenticationManager = authenticationManager;
+    }
 
     @Override
     public TokenResponse register(Usuario usuario) {
-        
-        String password=passwordEncoder.encode(usuario.getPassword());
+
+        String password = passwordEncoder.encode(usuario.getPassword());
         usuario.setPassword(password);
         usuarioRepository.save(usuario);
         String jwtToken = jwtService.generateToken(usuario);
-        String refreshToken=jwtService.generateRefreshToken(usuario);
-        //guardar el token en BBDD
-        saveUserToken(usuario,jwtToken);
+        String refreshToken = jwtService.generateRefreshToken(usuario);
+        saveUserToken(usuario, jwtToken);
 
         return new TokenResponse(jwtToken, refreshToken);
     }
 
-    private void saveUserToken(Usuario usuario, String jwtToken){
+    private void saveUserToken(Usuario usuario, String jwtToken) {
         Token token = new Token(jwtToken, false, false, usuario);
         tokenRepository.save(token);
-
     }
 
+    @Override
+    public TokenResponse login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPasword()));
+
+        Usuario usuario = usuarioRepository.findByUsername(request.getUsername());
+        String jwtToken = jwtService.generateToken(usuario);
+        String refreshToken = jwtService.generateRefreshToken(usuario);
+        revokeAllUserToken(usuario);
+        saveUserToken(usuario, jwtToken);
+
+        return new TokenResponse(jwtToken, refreshToken);
+    }
+
+    private void revokeAllUserToken(Usuario usuario) {
+        List<Token> validUserTokens = tokenRepository.findByExpiredAndRevokedAndUsuario_id(false, false, usuario.getId());
+
+        if (!validUserTokens.isEmpty()) {
+            for (Token token : validUserTokens) {
+                token.setExpired(true);
+                token.setRevoked(true);
+            }
+        }
+        tokenRepository.saveAll(validUserTokens);
+    }
 }
